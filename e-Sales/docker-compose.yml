@@ -1,0 +1,80 @@
+name: e-sales
+
+services:
+  sales-postgres:
+    image: postgres:16-alpine
+    ports:
+      - "127.0.0.1:5433:5432"
+    environment:
+      POSTGRES_DB: e_sales
+      POSTGRES_USER: ${POSTGRES_USER:-e_sales}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
+    volumes:
+      - sales-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+    networks: [sales]
+
+  sales-mailpit:
+    image: axllent/mailpit:v1.27
+    ports:
+      - "127.0.0.1:${MAILPIT_UI_PORT:-8027}:8025"
+    restart: unless-stopped
+    networks: [sales]
+
+  sales-backend:
+    build:
+      context: ./backend
+    environment:
+      DB_URL: jdbc:postgresql://sales-postgres:5432/e_sales
+      DB_USERNAME: ${POSTGRES_USER:-e_sales}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET is required}
+      ADMIN_USERNAME: ${ADMIN_USERNAME:-sales-admin}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-}
+      ADMIN_INITIAL_PASSWORD: ${ADMIN_INITIAL_PASSWORD:-}
+      SALES_PUBLIC_URL: ${SALES_PUBLIC_URL:-http://localhost:3090}
+      SCHOOL_PROVIDER_URL: ${SCHOOL_PROVIDER_URL:-http://ecole-backend:8080/api/provider/v1}
+      SCHOOL_PROVIDER_KEY: ${SCHOOL_PROVIDER_KEY:?SCHOOL_PROVIDER_KEY is required}
+      CAFE_PROVIDER_ENABLED: ${CAFE_PROVIDER_ENABLED:-false}
+      CAFE_PROVIDER_URL: ${CAFE_PROVIDER_URL:-}
+      CAFE_PROVIDER_KEY: ${CAFE_PROVIDER_KEY:-}
+      PROVIDER_READ_TIMEOUT_SECONDS: ${PROVIDER_READ_TIMEOUT_SECONDS:-120}
+      MAIL_HOST: ${MAIL_HOST:-sales-mailpit}
+      MAIL_PORT: ${MAIL_PORT:-1025}
+      MAIL_USERNAME: ${MAIL_USERNAME:-}
+      MAIL_PASSWORD: ${MAIL_PASSWORD:-}
+      MAIL_SMTP_AUTH: ${MAIL_SMTP_AUTH:-false}
+      MAIL_SMTP_STARTTLS_ENABLE: ${MAIL_SMTP_STARTTLS_ENABLE:-false}
+      MAIL_FROM: ${MAIL_FROM:-noreply@e-sales.local}
+    depends_on:
+      sales-postgres:
+        condition: service_healthy
+      sales-mailpit:
+        condition: service_started
+    restart: unless-stopped
+    networks: [sales, school-provider]
+
+  sales-portal:
+    build:
+      context: ./portal
+    ports:
+      - "${HTTP_BIND_ADDRESS:-127.0.0.1}:${HTTP_PORT:-3090}:80"
+    depends_on:
+      sales-backend:
+        condition: service_started
+    restart: unless-stopped
+    networks: [sales]
+
+networks:
+  sales:
+  school-provider:
+    external: true
+    name: ${ECOLE_NETWORK:-e-cole_e-cole}
+
+volumes:
+  sales-postgres-data:

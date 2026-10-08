@@ -1,0 +1,38 @@
+server:
+  port: 8090
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5433/e_sales}
+    username: ${DB_USERNAME:e_sales}
+    password: ${DB_PASSWORD:}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  flyway:
+    enabled: true
+  mail:
+    host: ${MAIL_HOST:}
+    port: ${MAIL_PORT:1025}
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}
+    properties:
+      mail.smtp.auth: ${MAIL_SMTP_AUTH:false}
+      mail.smtp.starttls.enable: ${MAIL_SMTP_STARTTLS_ENABLE:false}
+app:
+  jwt-secret: ${JWT_SECRET:}
+  admin-username: ${ADMIN_USERNAME:}
+  admin-email: ${ADMIN_EMAIL:}
+  admin-initial-password: ${ADMIN_INITIAL_PASSWORD:}
+  public-url: ${SALES_PUBLIC_URL:http://localhost:3090}
+  provider-read-timeout-seconds: ${PROVIDER_READ_TIMEOUT_SECONDS:120}
+  providers:
+    school:
+      url: ${SCHOOL_PROVIDER_URL:http://ecole-backend:8080/api/provider/v1}
+      key: ${SCHOOL_PROVIDER_KEY:}
+      enabled: true
+    cafe:
+      url: ${CAFE_PROVIDER_URL:}
+      key: ${CAFE_PROVIDER_KEY:}
+      enabled: ${CAFE_PROVIDER_ENABLED:false}
+  mail-from: ${MAIL_FROM:noreply@e-sales.local}

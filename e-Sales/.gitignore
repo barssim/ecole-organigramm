@@ -1,0 +1,7 @@
+.env
+.env.local
+backend/target/
+portal/node_modules/
+portal/build/
+portal/coverage/
+*.log

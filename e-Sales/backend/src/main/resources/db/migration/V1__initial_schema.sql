@@ -1,0 +1,29 @@
+CREATE TABLE sales_user (
+  id BIGSERIAL PRIMARY KEY,
+  username VARCHAR(48) NOT NULL UNIQUE,
+  name VARCHAR(160) NOT NULL,
+  email VARCHAR(254) NOT NULL,
+  password_hash VARCHAR(100) NOT NULL,
+  role VARCHAR(32) NOT NULL,
+  active BOOLEAN NOT NULL DEFAULT TRUE,
+  created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TABLE invitation (
+  id BIGSERIAL PRIMARY KEY,
+  user_id BIGINT NOT NULL REFERENCES sales_user(id) ON DELETE CASCADE,
+  token_hash VARCHAR(64) NOT NULL UNIQUE,
+  expires_at TIMESTAMP WITH TIME ZONE NOT NULL,
+  used_at TIMESTAMP WITH TIME ZONE,
+  created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+CREATE INDEX invitation_user_idx ON invitation(user_id);
+CREATE TABLE customer_ownership (
+  id BIGSERIAL PRIMARY KEY,
+  product_id VARCHAR(24) NOT NULL,
+  tenant_id VARCHAR(160) NOT NULL,
+  owner_id BIGINT REFERENCES sales_user(id) ON DELETE RESTRICT,
+  customer_name VARCHAR(200) NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT customer_product_tenant_unique UNIQUE(product_id, tenant_id)
+);
+CREATE INDEX customer_owner_idx ON customer_ownership(owner_id);

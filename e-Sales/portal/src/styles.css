@@ -1,0 +1,63 @@
+:root { color-scheme: light; font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #173747; background: #f2f6f8; }
+* { box-sizing: border-box; }
+body { margin: 0; }
+a { color: #075b89; text-underline-offset: 3px; overflow-wrap: anywhere; }
+button, input, select { font: inherit; }
+button { cursor: pointer; padding: .65rem 1rem; border-radius: .5rem; background: white; border: 1px solid #8096a3; color: #173747; font-weight: 600; }
+button:hover:not(:disabled) { background: #e9f1f5; }
+button:disabled { cursor: not-allowed; opacity: .6; }
+button.primary { background: #075b89; color: white; border-color: #075b89; }
+button.primary:hover:not(:disabled) { background: #06476c; }
+button.danger { color: #a01c2f; border-color: #c17c86; }
+:focus-visible { outline: 3px solid #a75b00; outline-offset: 3px; }
+header { background: #173747; color: white; padding: 1.4rem max(5vw, 1rem); display: flex; justify-content: space-between; gap: 1.5rem; align-items: center; flex-wrap: wrap; }
+.brand { font-size: 1.8rem; font-weight: 800; letter-spacing: -.04em; }
+.brand span { display: block; font-size: .8rem; font-weight: 500; letter-spacing: .06em; }
+.account { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+nav { display: flex; flex-wrap: wrap; gap: .5rem; padding: 1rem max(5vw, 1rem); background: white; border-bottom: 1px solid #d6e0e6; }
+nav button { border-color: transparent; }
+nav button[aria-current="page"] { background: #e2f0f6; color: #075b89; border-color: #075b89; }
+.workspace { max-width: 1280px; margin: 0 auto; padding: 2rem 1.25rem 3rem; }
+h1 { font-size: clamp(1.8rem, 4vw, 2.3rem); letter-spacing: -.04em; margin-top: 0; }
+h2 { font-size: 1.25rem; }
+p { line-height: 1.6; }
+.panel { background: white; border: 1px solid #d6e0e6; border-radius: .9rem; padding: 1.6rem; margin: 1.25rem 0; box-shadow: 0 3px 10px #17374708; }
+.auth { max-width: 540px; margin: 7vh auto; padding: 1.25rem; }
+.auth h1 { font-size: 1.75rem; }
+form, label { display: grid; gap: .5rem; }
+form { gap: 1rem; }
+label { font-weight: 600; font-size: .9rem; }
+input, select { width: 100%; min-width: 0; border: 1px solid #8096a3; border-radius: .4rem; padding: .7rem; background: white; color: #173747; }
+input[readonly] { background: #f2f6f8; font-family: ui-monospace, monospace; }
+fieldset { margin: 0; padding: 1rem; border: 1px solid #d6e0e6; border-radius: .5rem; }
+legend { padding: 0 .5rem; font-weight: 600; }
+.form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); gap: 1rem; align-items: end; }
+.actions { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 1.25rem; }
+.cards .panel { margin: 0; }
+.cards .actions { margin-top: 1.25rem; }
+.badge { font-size: .85rem; padding: .3rem .65rem; border-radius: 2rem; display: inline-block; font-weight: 600; }
+.ready { color: #176343; background: #def3e8; }
+.muted { background: #edf1f4; color: #455e6e; }
+.notice { padding: 1rem; border-radius: .5rem; background: #e4eff5; overflow-wrap: anywhere; }
+.notice p:first-child { margin-top: 0; }
+.notice input { margin-bottom: .75rem; }
+.error { background: #fce9ec; color: #8c1629; }
+.success { background: #e4f4eb; color: #20533b; }
+.table-wrap { overflow-x: auto; margin: 1.5rem 0; border: 1px solid #d6e0e6; border-radius: .6rem; background: white; padding: 1rem; }
+table { width: 100%; border-collapse: collapse; text-align: left; }
+caption { text-align: left; font-weight: 700; padding: .5rem; }
+th, td { padding: 1rem .65rem; border-bottom: 1px solid #d6e0e6; vertical-align: top; overflow-wrap: anywhere; }
+th { font-size: .85rem; background: #f2f6f8; }
+.owner-form { margin-top: .6rem; min-width: 190px; }
+.overlay { position: fixed; inset: 0; background: #102834b8; display: flex; justify-content: center; align-items: center; padding: 1rem; z-index: 10; }
+.dialog { width: 100%; max-width: 540px; max-height: 90vh; overflow: auto; background: white; padding: 2rem; border-radius: .9rem; }
+.dialog .actions { margin-top: 1.5rem; }
+footer { padding: 1.5rem; text-align: center; color: #516c7b; font-size: .85rem; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+@media (max-width: 600px) {
+  header { align-items: start; }
+  .workspace { padding: 1.5rem 1rem; }
+  .panel, .dialog { padding: 1.2rem; }
+  td, th { min-width: 120px; }
+}
